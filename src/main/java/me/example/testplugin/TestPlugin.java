@@ -1,8 +1,8 @@
-package me.example.plugin;
+package me.example.testplugin;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class ExamplePlugin extends JavaPlugin {
+public class TestPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {

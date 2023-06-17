@@ -1,4 +1,4 @@
-package me.example.plugin;
+package me.example.testplugin.loader;
 
 import com.google.gson.Gson;
 import io.papermc.paper.plugin.loader.PluginClasspathBuilder;

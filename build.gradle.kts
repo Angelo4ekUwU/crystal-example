@@ -1,3 +1,5 @@
+import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
+
 plugins {
     id("java")
     id("xyz.jpenilla.run-paper") version "2.0.1"
@@ -28,42 +30,70 @@ java {
 }
 
 paper {
-    main = "me.example.plugin.ExamplePlugin"
-    loader = "me.example.plugin.PluginLibrariesLoader"
+    // Default values can be overridden if needed
+    // name = "TestPlugin"
+    // version = "1.0"
+    // description = "This is a test plugin"
+    // website = "https://example.com"
+    // author = "Notch"
+
+    // Plugin main class (required)
+    main = "me.example.testplugin.TestPlugin"
+
+    // Plugin bootstrapper/loader (optional)
+    bootstrapper = "me.example.testplugin.bootstrap.TestPluginBootstrap"
+    loader = "me.example.testplugin.loader.PluginLibrariesLoader"
+    hasOpenClassloader = false
+
+    // generate paper-libraries.json?
     generateLibrariesJson = true
-    author = "Me"
-    apiVersion = "1.19"
-    //defaultPermission = Default.OP
 
-    //depends {
-    //    register("FirstPlugin") {
-    //        required = true
-    //        bootstrap = false
-    //    }
-    //    register("SecondPlugin")
-    //}
+    // Mark plugin for supporting Folia
+    foliaSupported = true
 
-    //loadBefore {
-    //    register("FirstPlugin")
-    //}
+    // API version (Needs to be 1.19 or higher)
+    apiVersion = "1.20"
 
-    //loadAfter {
-    //    register("SecondPlugin")
-    //}
+    // Other possible properties from plugin.yml (optional)
+    load = BukkitPluginDescription.PluginLoadOrder.STARTUP // or POSTWORLD
+    authors = listOf("Notch", "Notch2")
 
-    //permissions {
-    //    register("exampleplugin.admin") {
-    //        description = "Admin permission"
-    //        default = Default.FALSE
-    //        children = listOf("exampleplugin.reload", "exampleplugin.use")
-    //    }
-    //    register("exampleplugin.reload") {
-    //        description = "Allows to reload plugin"
-    //    }
-    //    register("exampleplugin.use") {
-    //        description = "Allows to use plugin features"
-    //    }
-    //}
+    prefix = "TEST"
+    defaultPermission = BukkitPluginDescription.Permission.Default.OP // TRUE, FALSE, OP or NOT_OP
+    provides = listOf("TestPluginOldName", "TestPlug")
+
+    depends {
+        // Required dependency
+        register("WorldEdit") {
+            required = true
+            bootstrap = true
+        }
+        // Optional dependency
+        register("Essentials") {
+        }
+    }
+    loadBefore {
+        register("BeforePlugin") {
+            bootstrap = true
+        }
+    }
+    loadAfter {
+        register("AfterPlugin") {
+            bootstrap = true
+        }
+    }
+
+    permissions {
+        register("testplugin.*") {
+            children = listOf("testplugin.test") // Defaults permissions to true
+            // You can also specify the values of the permissions
+            childrenMap = mapOf("testplugin.test" to true)
+        }
+        register("testplugin.test") {
+            description = "Allows you to run the test command"
+            default = BukkitPluginDescription.Permission.Default.OP // TRUE, FALSE, OP or NOT_OP
+        }
+    }
 }
 
 tasks {
