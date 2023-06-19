@@ -52,7 +52,7 @@ paper {
     foliaSupported = true
 
     // API version (Needs to be 1.19 or higher)
-    apiVersion = "1.20"
+    apiVersion = "1.19"
 
     // Other possible properties from plugin.yml (optional)
     load = BukkitPluginDescription.PluginLoadOrder.STARTUP // or POSTWORLD
