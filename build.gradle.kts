@@ -2,8 +2,12 @@ import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 
 plugins {
     id("java")
-    id("xyz.jpenilla.run-paper") version "2.0.1"
-    id("net.minecrell.plugin-yml.paper") version "0.6.0-SNAPSHOT"
+    // Uncomment if you need Kotlin
+    //kotlin("jvm") version "1.9.0"
+    id("xyz.jpenilla.run-paper") version "2.1.0"
+    id("net.minecrell.plugin-yml.paper") version "0.6.0"
+    // Uncomment if you need NMS
+    //id("io.papermc.paperweight.userdev") version "1.5.5"
 }
 
 group = "me.example"
@@ -16,9 +20,13 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
+    compileOnly("io.sapphiremc.sapphire:sapphire-api:1.20.1-R0.1-SNAPSHOT")
+    //paperweight.devBundle("io.sapphiremc.sapphire", "1.20.1-R0.1-SNAPSHOT") // Uncomment if you need NMS
 
-    val crystalVersion = "2.0.0-SNAPSHOT"
+    // Uncomment if you need Kotlin
+    //library(kotlin("stdlib"))
+
+    val crystalVersion = "2.0.0"
     library("me.denarydev.crystal.paper:utils:$crystalVersion")
     library("me.denarydev.crystal.shared:config:$crystalVersion")
 }
@@ -28,6 +36,11 @@ java {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
+
+// Uncomment if you need Kotlin
+//kotlin {
+//    jvmToolchain(17)
+//}
 
 paper {
     // Default values can be overridden if needed
@@ -42,17 +55,17 @@ paper {
 
     // Plugin bootstrapper/loader (optional)
     bootstrapper = "me.example.testplugin.bootstrap.TestPluginBootstrap"
-    loader = "me.example.testplugin.loader.PluginLibrariesLoader"
+    loader = "me.example.testplugin.loader.PluginLibrariesLoader" // Libraries loader SHOULD be written in Java, not Kotlin
     hasOpenClassloader = false
 
-    // generate paper-libraries.json?
+    // Generate paper-libraries.json from `library` and `paperLibrary` in `dependencies`
     generateLibrariesJson = true
 
     // Mark plugin for supporting Folia
     foliaSupported = true
 
     // API version (Needs to be 1.19 or higher)
-    apiVersion = "1.19"
+    apiVersion = "1.20"
 
     // Other possible properties from plugin.yml (optional)
     load = BukkitPluginDescription.PluginLoadOrder.STARTUP // or POSTWORLD
@@ -62,24 +75,42 @@ paper {
     defaultPermission = BukkitPluginDescription.Permission.Default.OP // TRUE, FALSE, OP or NOT_OP
     provides = listOf("TestPluginOldName", "TestPlug")
 
-    depends {
-        // Required dependency
-        register("WorldEdit") {
-            required = true
-            bootstrap = true
-        }
-        // Optional dependency
-        register("Essentials") {
-        }
-    }
-    loadBefore {
+    bootstrapDependencies {
+        // Required dependency during bootstrap
+        register("WorldEdit")
+
+        // During bootstrap, load BeforePlugin's bootstrap code before ours
         register("BeforePlugin") {
-            bootstrap = true
+            required = false
+            load = net.minecrell.pluginyml.paper.PaperPluginDescription.RelativeLoadOrder.BEFORE
+        }
+        // During bootstrap, load AfterPlugin's bootstrap code after ours
+        register("AfterPlugin") {
+            required = false
+            load = net.minecrell.pluginyml.paper.PaperPluginDescription.RelativeLoadOrder.AFTER
         }
     }
-    loadAfter {
-        register("AfterPlugin") {
-            bootstrap = true
+
+    serverDependencies {
+        // During server run time, require LuckPerms, add it to the classpath, and load it before us
+        register("LuckPerms") {
+            load = net.minecrell.pluginyml.paper.PaperPluginDescription.RelativeLoadOrder.BEFORE
+        }
+
+        // During server run time, require WorldEdit, add it to the classpath, and load it before us
+        register("WorldEdit") {
+            load = net.minecrell.pluginyml.paper.PaperPluginDescription.RelativeLoadOrder.BEFORE
+        }
+
+        // Optional dependency, add it to classpath if it is available
+        register("ProtocolLib") {
+            required = false
+        }
+
+        // During server run time, optionally depend on Essentials but do not add it to the classpath
+        register("Essentials") {
+            required = false
+            joinClasspath = false
         }
     }
 
@@ -93,6 +124,12 @@ paper {
             description = "Allows you to run the test command"
             default = BukkitPluginDescription.Permission.Default.OP // TRUE, FALSE, OP or NOT_OP
         }
+    }
+}
+
+runPaper {
+    folia {
+        registerTask()
     }
 }
 
@@ -111,12 +148,18 @@ tasks {
         options.isFork = true
     }
 
+    // Uncomment if you need Kotlin
+    //compileKotlin {
+    //    compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    //}
+
     processResources {
         filteringCharset = Charsets.UTF_8.name()
     }
 
     runServer {
-        minecraftVersion("1.19.4")
-        runDirectory.set(project.projectDir.resolve("run/"))
+        minecraftVersion("1.20.1")
+        val file = projectDir.resolve("run/server.jar") // Check for a custom server.jar file
+        if (file.exists()) serverJar(file)
     }
 }

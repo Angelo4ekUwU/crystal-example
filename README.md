@@ -1,4 +1,9 @@
-# crystal-plugin-template
-Paper plugin template using Crystal modules
+# ExamplePlugin (1.20.1)
 
-Kotlin example [here](https://github.com/DenaryDev/crystal-example-kotlin)
+This is a paper plugin template with crystal modules
+
+Supports Paper and it forks (Folia, Pufferfish)
+
+#### Features (must be enabled by uncommenting in build.gradle.kts)
+- Kotlin support
+- NMS support
