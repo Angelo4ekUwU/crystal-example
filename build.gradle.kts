@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
     compileOnly("io.sapphiremc.sapphire:sapphire-api:1.20.1-R0.1-SNAPSHOT")
-    //paperweight.devBundle("io.sapphiremc.sapphire", "1.20.1-R0.1-SNAPSHOT") // Uncomment if you need NMS
+    //paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT") // Uncomment if you need NMS
 
     // Uncomment if you need Kotlin
     //library(kotlin("stdlib"))
