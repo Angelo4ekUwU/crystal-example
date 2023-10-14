@@ -3,11 +3,11 @@ import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 plugins {
     id("java")
     // Uncomment if you need Kotlin
-    //kotlin("jvm") version "1.9.0"
-    id("xyz.jpenilla.run-paper") version "2.1.0"
+    //kotlin("jvm") version "1.9.10"
+    id("xyz.jpenilla.run-paper") version "2.2.0"
     id("net.minecrell.plugin-yml.paper") version "0.6.0"
     // Uncomment if you need NMS
-    //id("io.papermc.paperweight.userdev") version "1.5.5"
+    //id("io.papermc.paperweight.userdev") version "1.5.8"
 }
 
 group = "me.example"
@@ -21,12 +21,13 @@ repositories {
 
 dependencies {
     compileOnly("io.sapphiremc.sapphire:sapphire-api:1.20.1-R0.1-SNAPSHOT")
-    //paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT") // Uncomment if you need NMS
+    // Uncomment if you need NMS
+    //paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
 
     // Uncomment if you need Kotlin
     //library(kotlin("stdlib"))
 
-    val crystalVersion = "2.0.0"
+    val crystalVersion = "2.0.1"
     library("me.denarydev.crystal.paper:utils:$crystalVersion")
     library("me.denarydev.crystal.shared:config:$crystalVersion")
 }
@@ -161,5 +162,11 @@ tasks {
         minecraftVersion("1.20.1")
         val file = projectDir.resolve("run/server.jar") // Check for a custom server.jar file
         if (file.exists()) serverJar(file)
+
+        // See https://github.com/jpenilla/run-task/wiki/Basic-Usage#downloading-plugins for more info
+        downloadPlugins {
+            // If you want to run Folia, delete the line below, as LuckPerms does not support Folia
+            url("https://download.luckperms.net/1517/bukkit/loader/LuckPerms-Bukkit-5.4.104.jar")
+        }
     }
 }
