@@ -1,13 +1,14 @@
 import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
+import xyz.jpenilla.runpaper.task.RunServer
 
 plugins {
     id("java")
     // Uncomment if you need Kotlin
-    //kotlin("jvm") version "1.9.10"
+    //kotlin("jvm") version "1.9.22"
     id("xyz.jpenilla.run-paper") version "2.2.0"
     id("net.minecrell.plugin-yml.paper") version "0.6.0"
     // Uncomment if you need NMS
-    //id("io.papermc.paperweight.userdev") version "1.5.8"
+    //id("io.papermc.paperweight.userdev") version "1.5.11"
 }
 
 group = "me.example"
@@ -15,19 +16,19 @@ version = "1.0.0"
 
 repositories {
     mavenCentral()
-    maven("https://papermc.io/repo/repository/maven-public/")
-    maven("https://the-planet.fun/repo/snapshots/")
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://the-planet.fun/repo/public/")
 }
 
 dependencies {
-    compileOnly("io.sapphiremc.sapphire:sapphire-api:1.20.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
     // Uncomment if you need NMS
-    //paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
+    //paperweight.paperDevBundle("1.20.2-R0.1-SNAPSHOT")
 
     // Uncomment if you need Kotlin
     //library(kotlin("stdlib"))
 
-    val crystalVersion = "2.0.1"
+    val crystalVersion = "2.1.0"
     library("me.denarydev.crystal.paper:utils:$crystalVersion")
     library("me.denarydev.crystal.shared:config:$crystalVersion")
 }
@@ -154,19 +155,27 @@ tasks {
     //    compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     //}
 
+    // Uncomment if you need NMS
+    //build {
+    //    dependsOn(reobfJar)
+    //}
+
     processResources {
         filteringCharset = Charsets.UTF_8.name()
     }
 
-    runServer {
-        minecraftVersion("1.20.1")
+    withType<RunServer>().configureEach {
+        minecraftVersion("1.20.2")
         val file = projectDir.resolve("run/server.jar") // Check for a custom server.jar file
         if (file.exists()) serverJar(file)
 
         // See https://github.com/jpenilla/run-task/wiki/Basic-Usage#downloading-plugins for more info
         downloadPlugins {
-            // If you want to run Folia, delete the line below, as LuckPerms does not support Folia
-            url("https://download.luckperms.net/1517/bukkit/loader/LuckPerms-Bukkit-5.4.104.jar")
+            // Don't download these plugins on Folia because they don't support Folia.
+            if (this@configureEach.name == "runServer") {
+                url("https://download.luckperms.net/1529/bukkit/loader/LuckPerms-Bukkit-5.4.116.jar")
+                url("https://repo.extendedclip.com/content/repositories/placeholderapi/me/clip/placeholderapi/2.11.5/placeholderapi-2.11.5.jar")
+            }
         }
     }
 }

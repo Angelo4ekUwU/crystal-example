@@ -37,7 +37,7 @@ public class Settings {
     @Comment("With crystal utils you can create items easily and save it to config!")
     public ItemStack exampleItem = ItemUtils.itemBuilder()
             .type(Material.NETHERITE_SWORD)
-            .displaynameRich("<red>Super Sword")
+            .displayNameRich("<red>Super Sword")
             .enchantment(Enchantment.DAMAGE_ALL, 10)
             .enchantment(Enchantment.FIRE_ASPECT, 2)
             .enchantment(Enchantment.DURABILITY, 5)
