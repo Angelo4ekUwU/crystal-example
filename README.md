@@ -1,4 +1,4 @@
-# ExamplePlugin (1.20.1)
+# ExamplePlugin
 
 This is a paper plugin template with crystal modules
 
