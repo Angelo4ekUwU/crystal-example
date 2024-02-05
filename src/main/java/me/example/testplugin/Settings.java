@@ -1,5 +1,6 @@
 package me.example.testplugin;
 
+import me.denarydev.crystal.config.BukkitConfigs;
 import me.denarydev.crystal.config.CrystalConfigs;
 import me.denarydev.crystal.utils.ItemUtils;
 import org.bukkit.Material;
@@ -21,13 +22,13 @@ public class Settings {
     }
 
     public static void load(Path file) throws ConfigurateException {
-        instance = CrystalConfigs.loadConfig(file, Settings.class, true);
+        instance = CrystalConfigs.loadConfig(file, BukkitConfigs.serializers(), Settings.class, true);
     }
 
     @Comment("This is an example setting")
     public String exampleString = "Example String";
 
-    @Comment("With crystal utils you can create items easily and save it to config!")
+    @Comment("With crystal utils you can create items easily and save it to config using serializers!")
     public ItemStack exampleItem = ItemUtils.itemBuilder()
             .type(Material.NETHERITE_SWORD)
             .displayNameRich("<red>Super Sword")

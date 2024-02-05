@@ -30,6 +30,7 @@ dependencies {
 
     val crystalVersion = "2.1.0"
     library("me.denarydev.crystal.paper:utils:$crystalVersion")
+    library("me.denarydev.crystal.paper:serializers:$crystalVersion")
     library("me.denarydev.crystal.shared:config:$crystalVersion")
 }
 
